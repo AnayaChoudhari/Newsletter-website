@@ -1,5 +1,5 @@
 
-# Mailchimp Newsletter Signup Website
+# Newsletter Signup Website
 
 ## Overview
 
