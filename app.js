@@ -1,4 +1,5 @@
 const express=require("express");
+// require('dotenv').config();
 const bodyParser=require("body-parser");
 const request=require("request");
 const https=require("https");
@@ -7,6 +8,14 @@ const app=express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended:true}));
 
+// mailchimp.setConfig({
+//     //API KEY
+//      apiKey: process.env.API_KEY,
+//     //API KEY PREFIX (THE SERVER)
+//       server: "us21"
+//     })
+
+const api_key = "a6ae7ed89a63ca4df1c41cd54fa50fa0-us21";
 app.post("/",function(req,res){
     const fisrtName=req.body.fname;
     const lastName=req.body.lname;
@@ -22,24 +31,32 @@ app.post("/",function(req,res){
                 }
 
             }
-        ]
+        ],
+        update_existing: true 
 
     };
+    console.log(api_key);
+    console.log(email);
+
     const jsonData=JSON.stringify(data);
-    const url="https://us21.api.mailchimp.com/3.0/lists/252c3e6c0d";
+    const url="https://us21.api.mailchimp.com/3.0/lists/236b099650/members";
     const options={
         method:"POST",
-        auth:"anaya1:b47f2213bed8b187c659baaa318771e3-us21"
+        auth:"anaya2:"+api_key
+
+        
+        
+        // body:jsonData
 
     }
     const request=https.request(url,options,function(response){
         if (response.statusCode===200){
             // res.send("Successfully subscribed!");
-            res.sendFile(__dirname+"/public/success.html");
+            res.sendFile(__dirname+"/success.html");
         }
         else{
             // res.send("There was an error in signing up,please try again!");
-            res.sendFile(__dirname+"/public/failure.html");
+            res.sendFile(__dirname+"/failure.html");
 
             
         }
@@ -56,15 +73,11 @@ app.post("/failure",function(req,res){
     res.redirect("/");
 })
 app.get("/",function(req,res){
-    res.sendFile(__dirname+"/public/signup.html");
+    res.sendFile(__dirname+"/signup.html");
 });
 app.listen(process.env.PORT || 3000,function(){
     console.log("Server is running on port 3000");
 });
 
-// API key
-// b47f2213bed8b187c659baaa318771e3-us21 
 
-// Audience id 
-// 252c3e6c0d 
 
